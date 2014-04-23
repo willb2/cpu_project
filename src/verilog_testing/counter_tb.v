@@ -1,23 +1,50 @@
-module test;
+module counter(clk, rst, en, cout);
+	input clk;
+	input rst;
+	input en;
+	output [3:0] cout;
 
-  /* Make a reset that pulses once. */
-  reg reset = 0;
-  initial begin
-     # 17 reset = 1;
-     # 11 reset = 0;
-     # 29 reset = 1;
-     # 11 reset = 0;
-     # 100 $stop;
-  end
+	wire clk;
+	wire rst;
+	wire en;
 
-  /* Make a regular pulsing clock. */
-  reg clk = 0;
-  always #5 clk = !clk;
+	reg[3:0] cout;
 
-  wire [7:0] value;
-  counter c1 (value, clk, reset);
+	always @ (posedge clk)
+	begin : COUNTER
+		if (rst == 1'b1) begin
+			cout <= #1 4'b0000;
+		end
+		else if (en == 1'b1) begin
+			cout <= #1 cout+1;
+		end
+	end
 
-  initial
-     $monitor("At time %t, value = %h (%0d)",
-              $time, value, value);
-endmodule // test
+endmodule
+
+
+module counter_tb();
+
+	reg clk, rst, en;
+	wire[3:0] cout;
+
+	initial begin
+		$display("time\t clk reset enable counter");
+		$monitor("%g\t %b   %b     %b      %b",  $time, clk, rst, en, cout);
+		clk = 1;
+		rst = 0;
+		en = 0;
+		#5 rst = 1;
+		#10 rst = 0;
+		#10 en = 1;
+		#100 en = 0;
+		#5 $finish;
+	end
+
+	always begin
+		#5 clk = ~clk;
+	end
+
+	counter t_counter(clk, rst, en, cout);
+
+endmodule
