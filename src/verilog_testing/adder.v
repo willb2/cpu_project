@@ -1,4 +1,13 @@
-module adder2_tb;
+
+module adder(a, b, sum);
+	input  [31:0] a;     // a input
+	input  [31:0] b;     // b input
+	output [31:0] sum;   // sum output
+	assign #250 {sum} = a + b;
+endmodule // add32
+
+
+module adder_tb;
 
   reg [31:0] counter;
 
@@ -16,7 +25,7 @@ module adder2_tb;
 
   initial #60000 $finish; // stop after 60 ns
 
-  adder2 adder(zero_32, four_32, counter);
+  adder adder(zero_32, four_32, counter);
 
   always @(posedge clk) // to show state of registers in pipeline
     begin

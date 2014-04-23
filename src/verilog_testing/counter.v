@@ -1,22 +1,52 @@
 
+module counter(clk, rst, en, cout);
+	input clk;
+	input rst;
+	input en;
+	output [3:0] cout;
 
-module counter(out, clk, reset);
+	wire clk;
+	wire rst;
+	wire en;
 
-  parameter WIDTH = 8;
+	reg[3:0] cout;
 
-  output [WIDTH-1 : 0] out;
-  input 	       clk, reset;
+	always @ (posedge clk)
+	begin : COUNTER
+		if (rst == 1'b1) begin
+			cout <= #1 4'b0000;
+		end
+		else if (en == 1'b1) begin
+			cout <= #1 cout+1;
+		end
+	end
 
-  reg [WIDTH-1 : 0]   out;
-  wire 	       clk, reset;
+endmodule
 
-  always @(posedge clk)
-    out <= out + 1;
 
-  always @reset
-    if (reset)
-      assign out = 0;
-    else
-      deassign out;
 
-endmodule // counter
+module counter_tb();
+
+	reg clk, rst, en;
+	wire[3:0] cout;
+
+	initial begin
+		$display("time\t clk reset enable counter");
+		$monitor("%g\t %b   %b     %b      %b",  $time, clk, rst, en, cout);
+		clk = 1;
+		rst = 0;
+		en = 0;
+		#5 rst = 1;
+		#10 rst = 0;
+		#10 en = 1;
+		#100 en = 0;
+		#5 $finish;
+	end
+
+	always begin
+		#5 clk = ~clk;
+	end
+
+	counter t_counter(clk, rst, en, cout);
+
+endmodule
