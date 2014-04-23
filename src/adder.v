@@ -1,7 +1,7 @@
-module   full_adder_4bit( cin, cout, in_a, in_b,  sum
+module   full_adder_32bit( cin, cout, in_a, in_b,  sum
 );
     
-    parameter   reg_size = 4;
+    parameter   reg_size = 32;
     
     input   cin;
     input   [reg_size-1:0] in_a;
