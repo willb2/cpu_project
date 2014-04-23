@@ -1,3 +1,5 @@
+// `include "alu.v"
+
 module counter(clk, rst, en, cout);
 	input clk;
 	input rst;
@@ -48,3 +50,5 @@ module counter_tb();
 	counter t_counter(clk, rst, en, cout);
 
 endmodule
+
+
