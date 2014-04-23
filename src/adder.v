@@ -1,22 +1,17 @@
 //
 //module   full_adder_32bit( cin, cout, in_a, in_b,  sum
-//);
-    
- //   parameter   reg_size = 32;
-    
+//);   
+ //   parameter   reg_size = 32;   
  //   input   cin;
  //   input   [reg_size-1:0] in_a;
  //   input   [reg_size-1:0] in_b;
  //   output  [reg_size-1:0] sum;
- //   output  cout;
-    
+ //   output  cout;   
  //   assign   {cout,sum} = in_a + in_b + cin;
-
  // initial begin
  //   sum = 8'hf0;
 //    $display("sum : %d", sum);
 //end
-
 //endmodule
 
 //
@@ -29,7 +24,7 @@
 // Coder       : Deepak
 //-----------------------------------------------------
 `include "addbit.v"
-module adder_hier (
+module adder(
 result        , // Output of the adder
 carry         , // Carry output of adder
 r1            , // first input
@@ -86,7 +81,7 @@ initial begin
 end
 
 // Connect the lower module
-adder_hier U (result,carry,r1,r2,ci);
+adder U (result,carry,r1,r2,ci);
 
 // Hier demo here
 initial begin
