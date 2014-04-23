@@ -1,12 +1,16 @@
 
 
-module controls(aluOp, data1, data2, result, zero);
-	input [3:0] aluOp
-	input [31:0] data1, data2;
-	output [31:0] result;
-	output zero;
+module controls(opcode, regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
+	input [4:0] opcode;
+	output regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg;
+	output [3:0] aluOp;
 
 	
+
+
+	
+
+
 
 
 endmodule
