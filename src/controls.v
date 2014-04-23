@@ -7,7 +7,16 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 	output [3:0] aluOp;
 
 
+	// Controls
+		// Signal Name			Effect When Deasserted 			Effect When Assert
 
+		// RegDst 				RgDst comes from rt field 		RgDst comes from rd field
+		// RegWrite 			None 							writeData input written to Write register
+		// ALUSrc 				2nd ALU src from RegData2 		2nd ALU src from SignExtend
+		// PCSrc 				PC input from adder+4 			PC input from adder, branch target
+		// MemRead 				None 							Data Read from Memory
+		// MemWrite 			None							Data Written to Memory
+		// MemToReg 			RegWriteData comes from ALU 	RegWriteData comes from Memory
 
 
 
