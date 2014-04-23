@@ -10,7 +10,10 @@ module   full_adder_32bit( cin, cout, in_a, in_b,  sum
     output  cout;
     
     assign   {cout,sum} = in_a + in_b + cin;
-    $display("sum : %d", sum)
-
     
+  initial begin
+    acc = 8'hf0;
+    $display("acc : %d", acc);
+end
+
 endmodule
