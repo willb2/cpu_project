@@ -1,18 +1,15 @@
 
-
 module alu(aluOp, data1, data2, result); //zero);
 	input [3:0] aluOp;
 	input [31:0] data1, data2;
 	output reg [31:0] result;
 	//output zero;
 
-	wire signed [31:0] data1_s, data2_s;
-	wire signed [31:0] data_add;
-	wire signed [31:0] data_sub;
+	wire signed [31:0] data1_s, data2_s, data_add, data_sub;
 
 	assign data1_s = data1;
 	assign data2_s = data2;
-	assign data_add = (data1_s + data2_s);
+	assign data_add = data1 + data2;
 	assign data_sub = (data1_s - data2_s);
 
 
@@ -48,7 +45,7 @@ module alu_tb();
 	initial 
 	begin
 		$display("ALU Testbench");
-		aluOp_tb = 4'b1111;//0010;
+		aluOp_tb = 4'b0010;
 		data1_tb = 32'h0001;
 		data2_tb = 32'h0001;
 		$display("ADD: %h + %h = %h", data1_tb, data2_tb, result_tb);
@@ -63,7 +60,6 @@ module alu_tb();
 	end
 
 	alu alu_t(aluOp_tb, data1_tb, data2_tb, result_tb);
-
 
 
 endmodule

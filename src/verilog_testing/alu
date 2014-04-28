@@ -1,0 +1,97 @@
+#! /usr/local/bin/vvp
+:ivl_version "0.9.5 " "(v0_9_5)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x7f814940a800 .scope module, "alu_tb" "alu_tb" 2 38;
+ .timescale 0 0;
+v0x7f814941c1a0_0 .var "aluOp_tb", 3 0;
+v0x7f814941c250_0 .var "data1_tb", 31 0;
+v0x7f814941c2d0_0 .var "data2_tb", 31 0;
+v0x7f814941c390_0 .net "result_tb", 31 0, v0x7f814941c120_0; 1 drivers
+S_0x7f8149409fb0 .scope module, "alu_t" "alu" 2 62, 2 2, S_0x7f814940a800;
+ .timescale 0 0;
+L_0x7f814941c430 .functor BUFZ 32, v0x7f814941c250_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+L_0x7f814941c4f0 .functor BUFZ 32, v0x7f814941c2d0_0, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>, C4<00000000000000000000000000000000>;
+v0x7f814940a310_0 .net "aluOp", 3 0, v0x7f814941c1a0_0; 1 drivers
+v0x7f814941bd70_0 .net "data1", 31 0, v0x7f814941c250_0; 1 drivers
+v0x7f814941be00_0 .net/s "data1_s", 31 0, L_0x7f814941c430; 1 drivers
+v0x7f814941be80_0 .net "data2", 31 0, v0x7f814941c2d0_0; 1 drivers
+v0x7f814941bf10_0 .net/s "data2_s", 31 0, L_0x7f814941c4f0; 1 drivers
+v0x7f814941bfd0_0 .net/s "data_add", 31 0, L_0x7f814941c590; 1 drivers
+v0x7f814941c060_0 .net/s "data_sub", 31 0, L_0x7f814941c6a0; 1 drivers
+v0x7f814941c120_0 .var "result", 31 0;
+E_0x7f8149407580/0 .event edge, v0x7f814940a310_0, v0x7f814941bd70_0, v0x7f814941be80_0, v0x7f814941bfd0_0;
+E_0x7f8149407580/1 .event edge, v0x7f814941c060_0;
+E_0x7f8149407580 .event/or E_0x7f8149407580/0, E_0x7f8149407580/1;
+L_0x7f814941c590 .arith/sum 32, v0x7f814941c250_0, v0x7f814941c2d0_0;
+L_0x7f814941c6a0 .arith/sub 32, L_0x7f814941c430, L_0x7f814941c4f0;
+    .scope S_0x7f8149409fb0;
+T_0 ;
+    %wait E_0x7f8149407580;
+    %load/v 8, v0x7f814940a310_0, 4;
+    %cmpi/u 8, 0, 4;
+    %jmp/1 T_0.0, 6;
+    %cmpi/u 8, 1, 4;
+    %jmp/1 T_0.1, 6;
+    %cmpi/u 8, 2, 4;
+    %jmp/1 T_0.2, 6;
+    %cmpi/u 8, 6, 4;
+    %jmp/1 T_0.3, 6;
+    %cmpi/u 8, 7, 4;
+    %jmp/1 T_0.4, 6;
+    %cmpi/u 8, 12, 4;
+    %jmp/1 T_0.5, 6;
+    %set/v v0x7f814941c120_0, 0, 32;
+    %jmp T_0.7;
+T_0.0 ;
+    %load/v 8, v0x7f814941bd70_0, 32;
+    %load/v 40, v0x7f814941be80_0, 32;
+    %and 8, 40, 32;
+    %set/v v0x7f814941c120_0, 8, 32;
+    %jmp T_0.7;
+T_0.1 ;
+    %load/v 8, v0x7f814941bd70_0, 32;
+    %load/v 40, v0x7f814941be80_0, 32;
+    %or 8, 40, 32;
+    %set/v v0x7f814941c120_0, 8, 32;
+    %jmp T_0.7;
+T_0.2 ;
+    %load/v 8, v0x7f814941bfd0_0, 32;
+    %set/v v0x7f814941c120_0, 8, 32;
+    %jmp T_0.7;
+T_0.3 ;
+    %load/v 8, v0x7f814941c060_0, 32;
+    %set/v v0x7f814941c120_0, 8, 32;
+    %jmp T_0.7;
+T_0.4 ;
+    %set/v v0x7f814941c120_0, 0, 32;
+    %jmp T_0.7;
+T_0.5 ;
+    %set/v v0x7f814941c120_0, 0, 32;
+    %jmp T_0.7;
+T_0.7 ;
+    %jmp T_0;
+    .thread T_0, $push;
+    .scope S_0x7f814940a800;
+T_1 ;
+    %vpi_call 2 47 "$display", "ALU Testbench";
+    %movi 8, 2, 4;
+    %set/v v0x7f814941c1a0_0, 8, 4;
+    %movi 8, 1, 32;
+    %set/v v0x7f814941c250_0, 8, 32;
+    %movi 8, 1, 32;
+    %set/v v0x7f814941c2d0_0, 8, 32;
+    %vpi_call 2 51 "$display", "ADD: %h + %h = %h", v0x7f814941c250_0, v0x7f814941c2d0_0, v0x7f814941c390_0;
+    %movi 8, 6, 4;
+    %set/v v0x7f814941c1a0_0, 8, 4;
+    %vpi_call 2 56 "$display", "SUB: %h - %h = %h", v0x7f814941c250_0, v0x7f814941c2d0_0, v0x7f814941c390_0;
+    %vpi_call 2 59 "$finish";
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "alu.v";
