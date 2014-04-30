@@ -1,16 +1,13 @@
+/*
+	
+*/
 
 module alu(aluOp, data1, data2, result); //zero);
-	input [3:0] aluOp;
-	input [31:0] data1, data2;
-	output reg [31:0] result;
+	input wire [3:0] aluOp;
+	input wire [31:0] data1, data2;
+	output wire [31:0] result;
+	reg [31:0] out;
 	//output zero;
-
-	wire signed [31:0] data1_s, data2_s, data_add, data_sub;
-
-	assign data1_s = data1;
-	assign data2_s = data2;
-	assign data_add = data1 + data2;
-	assign data_sub = (data1_s - data2_s);
 
 
 	// ALU Opcode
@@ -20,17 +17,20 @@ module alu(aluOp, data1, data2, result); //zero);
 		// 0110 subtract
 		// 0111 set on less than
 		// 1100 NOR
-	always @ (*) begin
+	always @ (*) 
+	begin
 		case(aluOp)
-			4'b0000 : result = data1 & data2; // AND
-			4'b0001 : result = data1 | data2; // OR
-			4'b0010 : result = data_add; // add
-			4'b0110 : result = data_sub; // subtract
-			4'b0111 : result = 32'h0; // set on less than
-			4'b1100 : result = 32'h0; // NOR
-			default : result = 32'h0;
+			4'b0000 : out = data1 & data2; // AND
+			4'b0001 : out = data1 | data2; // OR
+			4'b0010 : out = data1 + data2; // add
+			4'b0110 : out = data1 - data2; // subtract
+			4'b0111 : out = 32'h0; // set on less than
+			4'b1100 : out = 32'h0; // NOR
+			default : out = 32'h0;
 		endcase
 	end
+
+	assign result = out;
 
 endmodule
 
@@ -45,16 +45,24 @@ module alu_tb();
 	initial 
 	begin
 		$display("ALU Testbench");
-		aluOp_tb = 4'b0010;
-		data1_tb = 32'h0001;
-		data2_tb = 32'h0001;
-		$display("ADD: %h + %h = %h", data1_tb, data2_tb, result_tb);
-
+		data1_tb = 32'h000F;
+		data2_tb = 32'h0007;
+		
+		aluOp_tb = 4'b0000;
+		#100
+		$display("AND: %h & %h = %h", data1_tb, data2_tb, result_tb);
+		
+		aluOp_tb = 4'b0001;
+		#100
+		$display("OR: %h | %h = %h", data1_tb, data2_tb, result_tb);
+		
 		aluOp_tb = 4'b0110;
-		//data1_tb = 32'h0001;
-		//data2_tb = 32'h0001;
+		#100
 		$display("SUB: %h - %h = %h", data1_tb, data2_tb, result_tb);
-
+		
+		aluOp_tb = 4'b0010;
+		#100
+		$display("ADD: %h + %h = %h", data1_tb, data2_tb, result_tb);
 		
 		$finish;
 	end

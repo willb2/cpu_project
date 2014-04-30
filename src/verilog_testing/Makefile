@@ -10,6 +10,15 @@ signext: signext.v
 alu: alu.v
 	iverilog -o alu alu.v
 
+data_memory: data_memory.v
+	iverilog -o data_memory data_memory.v
+
+instr_memory: instr_memory.v
+	iverilog -o instr_memory instr_memory.v
+
+registers: registers.v
+	iverilog -o registers registers.v
+
 clean:
 	find . -perm +100 -type f -delete
 
