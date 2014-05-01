@@ -1,9 +1,11 @@
 
 
 module registers(readReg1, readReg2, writeReg, readData1, readData2, writeData);
-	input [4:0] readReg1, readReg2, writeReg;
-	input [31:0] writeData;
-	output reg [31:0] readData1, readData2;
+
+
+	input [4:0] readReg1, readReg2, writeReg; //read/ write registers
+	input [31:0] writeData; //write data
+	output reg [31:0] readData1, readData2; //read data
 
 	reg [31:0] reggies [0:31];
 
@@ -18,6 +20,8 @@ module registers(readReg1, readReg2, writeReg, readData1, readData2, writeData);
 		end
 	end
 	*/
+
+	
 	always@(readReg1)
 		readData1 = reggies[readReg1];
 	
@@ -33,6 +37,8 @@ module registers(readReg1, readReg2, writeReg, readData1, readData2, writeData);
 endmodule
 
 
+
+//test bench
 module registers_tb();
 	reg [4:0] readReg1_tb, readReg2_tb, writeReg_tb;
 	reg [31:0] writeData_tb;
@@ -40,7 +46,7 @@ module registers_tb();
 
 	initial 
 	begin
-		$display("Registers Testbench");
+		$display("Registers Testbench\n");
 		// Set parameters
 		readReg1_tb = 5'h00;
 		readReg2_tb = 5'h02;
@@ -48,7 +54,7 @@ module registers_tb();
 		writeData_tb = 32'hF0F0;
 
 		#100
-		$display("register %h has data %h", readReg1_tb, readData1_tb);
+		$display("register %h has data %h\n", readReg1_tb, readData1_tb);
 
 
 
