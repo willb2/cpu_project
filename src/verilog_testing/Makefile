@@ -19,6 +19,12 @@ instr_memory: instr_memory.v
 registers: registers.v
 	iverilog -o registers registers.v
 
+controls: controls.v
+	iverilog -o controls controls.v
+
+program_counter: program_counter.v
+	iverilog -o program_counter program_counter.v
+
 clean:
 	find . -perm +100 -type f -delete
 

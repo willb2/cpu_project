@@ -3,8 +3,8 @@
 module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 	input [5:0] opcode;
 	input [4:0] funct;
-	output regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg;
-	output [3:0] aluOp;
+	output reg regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg;
+	output reg [3:0] aluOp;
 
 
 	// Opcodes
@@ -40,6 +40,105 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 		// R-Type		10 			100101 			OR 					0001
 		// R-Type 		10 			101010 			set on less than 	0111
 
+	always @ (opcode) 
+	begin
+		case(opcode)
+			6'h00 : // ADD
+				begin
+					regDst = 1'b0;
+					regWrite = 1'b0;
+					aluSrc = 1'b0;
+					pcSrc = 1'b0;
+					memRead = 1'b0;
+					memWrite = 1'b0;
+					memToReg = 1'b0;
+					aluOp = 2'b00;
+				end
+			6'h08 : // ADDI
+				begin
+					regDst = 1'b0;
+					regWrite = 1'b0;
+					aluSrc = 1'b0;
+					pcSrc = 1'b0;
+					memRead = 1'b0;
+					memWrite = 1'b0;
+					memToReg = 1'b0;
+					aluOp = 2'b00;
+				end
+
+			6'h23 : // LW
+				begin
+					regDst = 1'b0;
+					regWrite = 1'b0;
+					aluSrc = 1'b0;
+					pcSrc = 1'b0;
+					memRead = 1'b0;
+					memWrite = 1'b0;
+					memToReg = 1'b0;
+					aluOp = 2'b00;
+				end
+
+			6'h2B : // SW
+				begin
+					regDst = 1'b0;
+					regWrite = 1'b0;
+					aluSrc = 1'b0;
+					pcSrc = 1'b0;
+					memRead = 1'b0;
+					memWrite = 1'b0;
+					memToReg = 1'b0;
+					aluOp = 2'b00;
+				end
+
+			6'h04 : // BEQ
+				begin
+					regDst = 1'b0;
+					regWrite = 1'b0;
+					aluSrc = 1'b0;
+					pcSrc = 1'b0;
+					memRead = 1'b0;
+					memWrite = 1'b0;
+					memToReg = 1'b0;
+					aluOp = 2'b00;
+				end
+
+			6'h05 : // BNE
+				begin
+					regDst = 1'b0;
+					regWrite = 1'b0;
+					aluSrc = 1'b0;
+					pcSrc = 1'b0;
+					memRead = 1'b0;
+					memWrite = 1'b0;
+					memToReg = 1'b0;
+					aluOp = 2'b00;
+				end
+
+			6'h02 : // JMP
+				begin
+					regDst = 1'b0;
+					regWrite = 1'b0;
+					aluSrc = 1'b0;
+					pcSrc = 1'b0;
+					memRead = 1'b0;
+					memWrite = 1'b0;
+					memToReg = 1'b0;
+					aluOp = 2'b00;
+				end
+
+			default : 
+				begin
+					regDst = 1'b0;
+					regWrite = 1'b0;
+					aluSrc = 1'b0;
+					pcSrc = 1'b0;
+					memRead = 1'b0;
+					memWrite = 1'b0;
+					memToReg = 1'b0;
+					aluOp = 2'b00;
+				end
+		endcase
+	end
 
 
 
@@ -67,9 +166,7 @@ module controls_tb();
 		$finish;
 	end
 
-	alu alu_t(aluOp_tb, data1_tb, data2_tb, result_tb);
-
-
+	controls controls_t(opcode_tb, funct_tb, regDst_tb, regWrite_tb, aluSrc_tb, pcSrc_tb, memRead_tb, memWrite_tb, memToReg_tb, aluOp_tb);
 
 endmodule
 

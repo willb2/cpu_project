@@ -9,8 +9,8 @@ module data_memory(memRead, memWrite, address, dataIn, dataOut);
 
 	reg [31:0] Mem [0:200]; // 201 32-bit words
 
-	//initial $readmemh("data_memory.txt", mem);
-	
+	initial $readmemh("data.txt", Mem);
+
 	always@(memRead)
 		if(memRead)
 			dataOut = Mem[address];
@@ -38,6 +38,14 @@ module data_memory_tb();
 		address_tb = 32'h0001;
 		dataIn_tb = 32'hF0F0;
 
+		// Check that memory has been initialized with data
+		address_tb = 32'h0000;
+		memRead_tb = 1'b1;
+		#100
+		$display("Initialization check: retrieved %h from address %h", dataOut_tb, address_tb);
+		memRead_tb = 1'b0;
+
+		//
 		memWrite_tb = 1'b1;
 		#100
 		$display("writing %h to address %h", dataIn_tb, address_tb);
