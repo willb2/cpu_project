@@ -49,7 +49,7 @@ module registers_tb();
 
 		#100
 		$display("register %h has data %h", readReg1_tb, readData1_tb);
-
+		$display("register %h has data %h", readReg2_tb, readData2_tb);
 
 
 		$finish;

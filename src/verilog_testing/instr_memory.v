@@ -9,14 +9,8 @@ module instr_memory(address, instruction);
 
 	reg [31:0] Mem [0:10]; // 201 32-bit words
 
-	//initial $readmemh("instructions.txt", mem);
-	// http://stackoverflow.com/questions/628603/readmemh-writememh-related-resources
-
-	initial Mem[0] = 32'h0000;
-	initial Mem[1] = 32'h1111;
-	initial Mem[2] = 32'h2222;
-	initial Mem[3] = 32'h3333;
-
+	initial $readmemh("instructions.txt", Mem);
+	
 	always@(address)
 		instruction = Mem[address];
 
