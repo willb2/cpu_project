@@ -12,7 +12,6 @@ module signext_tb();
 	reg [15:0] in_tb;
 	wire [31:0] out_tb;
 
-
 	initial 
 	begin
 		$display("Signext Testbench");

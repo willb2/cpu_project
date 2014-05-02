@@ -45,6 +45,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 		case(opcode)
 			6'h00 : // ADD
 				begin
+					$display("ADD Instruction");
 					regDst = 1'b0;
 					regWrite = 1'b0;
 					aluSrc = 1'b0;
@@ -56,6 +57,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 				end
 			6'h08 : // ADDI
 				begin
+					$display("ADDI Instruction");
 					regDst = 1'b0;
 					regWrite = 1'b0;
 					aluSrc = 1'b0;
@@ -68,6 +70,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 
 			6'h23 : // LW
 				begin
+					$display("LW Instruction");
 					regDst = 1'b0;
 					regWrite = 1'b0;
 					aluSrc = 1'b0;
@@ -80,6 +83,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 
 			6'h2B : // SW
 				begin
+					$display("SW Instruction");
 					regDst = 1'b0;
 					regWrite = 1'b0;
 					aluSrc = 1'b0;
@@ -92,6 +96,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 
 			6'h04 : // BEQ
 				begin
+					$display("BEQ Instruction");
 					regDst = 1'b0;
 					regWrite = 1'b0;
 					aluSrc = 1'b0;
@@ -104,6 +109,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 
 			6'h05 : // BNE
 				begin
+					$display("BNE Instruction");
 					regDst = 1'b0;
 					regWrite = 1'b0;
 					aluSrc = 1'b0;
@@ -116,6 +122,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 
 			6'h02 : // JMP
 				begin
+					$display("JMP Instruction");
 					regDst = 1'b0;
 					regWrite = 1'b0;
 					aluSrc = 1'b0;
@@ -128,6 +135,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 
 			default : 
 				begin
+					$display("Unknown Instruction: %h", opcode);
 					regDst = 1'b0;
 					regWrite = 1'b0;
 					aluSrc = 1'b0;

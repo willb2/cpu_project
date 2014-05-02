@@ -8,11 +8,21 @@ module instr_memory(address, instruction);
 	output reg [31:0] instruction;
 
 	reg [31:0] Mem [0:10]; // 201 32-bit words
+	reg [5:0] opcode;
 
 	initial $readmemh("instructions.txt", Mem);
 	
-	always@(address)
+	always@(address) begin
 		instruction = Mem[address];
+	end
+
+	always@(instruction) begin
+		opcode = instruction[31:26];
+		if(opcode == 6'h02) begin
+			$display("JMP Instruction: Jumping from address %h to %h", address, instruction[24:0]);
+			instruction = Mem[instruction[24:0]];
+		end
+	end
 
 endmodule
 

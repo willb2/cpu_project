@@ -1,15 +1,20 @@
+/*
 
+*/
 
-module program_counter(address1, address2, mux, addressOut);
+// Mux:  Norm: 0    Branch: 1
+
+module program_counter(addressNorm, addressBranch, mux, addressOut);
+
 	input mux;
-	input [31:0] address1, address2;
+	input [31:0] addressNorm, addressBranch;
 	output reg [31:0] addressOut;
 
 	always @ (mux)
 	if (mux) begin
-		addressOut = address2;
+		addressOut = addressBranch;
 	end else begin
-		addressOut = address1;
+		addressOut = addressNorm;
 	end
 	
 
@@ -17,14 +22,15 @@ endmodule
 
 
 module program_counter_tb();
+
 	reg mux_tb;
-	reg [31:0] address1_tb, address2_tb;
+	reg [31:0] addressNorm_tb, addressBranch_tb;
 	wire [31:0] addressOut_tb;
 
 	initial begin
 		$display("Program Counter Testbench");
-		address1_tb = 32'h0A;
-		address2_tb = 32'h0B;
+		addressNorm_tb = 32'h0A;
+		addressBranch_tb = 32'h0B;
 		mux_tb = 0;
 		#1
 		$display("Mux: %h -> Address: %h", mux_tb, addressOut_tb);
@@ -36,7 +42,6 @@ module program_counter_tb();
 		$finish;
 	end
 
-	program_counter program_counter_t(address1_tb, address2_tb, mux_tb, addressOut_tb);
-
+	program_counter program_counter_t(addressNorm_tb, addressBranch_tb, mux_tb, addressOut_tb);
 
 endmodule

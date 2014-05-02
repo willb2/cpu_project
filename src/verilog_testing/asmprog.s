@@ -22,7 +22,7 @@ main:
 
 loop:
 	addi $r2, $r2, -1 # subtract 1 from count 		0x2042FFFF
-	bne $r2, $zero, loop # compare count and zero 	0x10400001
+	bne $r2, $zero, loop # compare count and zero 	0x10400001 // this should be a relative jump, not absolute
 	add $r3, $r1, $zero # add data 					0x00610020
 	j end # jump end 								0x08000006
 
