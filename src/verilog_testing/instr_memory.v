@@ -27,7 +27,7 @@ module instr_memory(address, instruction);
 endmodule
 
 
-module data_memory_tb();
+module instr_memory_tb();
 	reg [31:0] address_tb;
 	wire [31:0] instruction_tb;
 

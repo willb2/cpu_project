@@ -2,7 +2,7 @@
 
 module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 	input [5:0] opcode;
-	input [4:0] funct;
+	input [5:0] funct;
 	output reg regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg;
 	output reg [3:0] aluOp;
 
@@ -53,7 +53,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 					memRead = 1'b0;
 					memWrite = 1'b0;
 					memToReg = 1'b0;
-					aluOp = 2'b00;
+					aluOp = 4'b00;
 				end
 			6'h08 : // ADDI
 				begin
@@ -65,7 +65,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 					memRead = 1'b0;
 					memWrite = 1'b0;
 					memToReg = 1'b0;
-					aluOp = 2'b00;
+					aluOp = 4'b00;
 				end
 
 			6'h23 : // LW
@@ -78,7 +78,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 					memRead = 1'b0;
 					memWrite = 1'b0;
 					memToReg = 1'b0;
-					aluOp = 2'b00;
+					aluOp = 4'b00;
 				end
 
 			6'h2B : // SW
@@ -91,7 +91,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 					memRead = 1'b0;
 					memWrite = 1'b0;
 					memToReg = 1'b0;
-					aluOp = 2'b00;
+					aluOp = 4'b00;
 				end
 
 			6'h04 : // BEQ
@@ -104,7 +104,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 					memRead = 1'b0;
 					memWrite = 1'b0;
 					memToReg = 1'b0;
-					aluOp = 2'b00;
+					aluOp = 4'b00;
 				end
 
 			6'h05 : // BNE
@@ -117,7 +117,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 					memRead = 1'b0;
 					memWrite = 1'b0;
 					memToReg = 1'b0;
-					aluOp = 2'b00;
+					aluOp = 4'b00;
 				end
 
 			6'h02 : // JMP
@@ -130,7 +130,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 					memRead = 1'b0;
 					memWrite = 1'b0;
 					memToReg = 1'b0;
-					aluOp = 2'b00;
+					aluOp = 4'b00;
 				end
 
 			default : 
@@ -143,7 +143,7 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 					memRead = 1'b0;
 					memWrite = 1'b0;
 					memToReg = 1'b0;
-					aluOp = 2'b00;
+					aluOp = 4'b00;
 				end
 		endcase
 	end
@@ -155,7 +155,7 @@ endmodule
 module controls_tb();
 
 	reg [5:0] opcode_tb;
-	reg [4:0] funct_tb;
+	reg [5:0] funct_tb;
 	wire regDst_tb, regWrite_tb, aluSrc_tb, pcSrc_tb, memRead_tb, memWrite_tb, memToReg_tb;
 	wire [3:0] aluOp_tb;
 
@@ -163,7 +163,7 @@ module controls_tb();
 	begin
 		$display("Controls Testbench");
 		opcode_tb = 6'h00;
-		funct_tb = 5'h00;
+		funct_tb = 6'h00;
 
 		#100
 		$display("___ Instruction: regDst %h, regWrite %h, aluSrc %h", regDst_tb, regWrite_tb, aluSrc_tb);

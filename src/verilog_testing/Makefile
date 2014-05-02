@@ -25,6 +25,12 @@ controls: controls.v
 program_counter: program_counter.v
 	iverilog -o program_counter program_counter.v
 
+top: top.v
+	iverilog -o top top.v
+
+andGate: and_gate.v
+	iverilog -o and_gate and_gate.v
+
 clean:
 	find . -perm +100 -type f -delete
 
