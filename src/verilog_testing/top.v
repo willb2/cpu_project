@@ -144,7 +144,7 @@ module top_tb();
 	end
 	*/
 	always begin
-		while (count < 6'h20) begin
+		while (count < 6'h15) begin
 			count = count + 1;
 			#1 $display("---- Clk Cycle %h ----", count);
 			#100 clk_tb = 1;
