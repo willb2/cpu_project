@@ -7,6 +7,7 @@ module signext(in, out);
 endmodule
 
 
+/*
 module signext_tb();
 
 	reg [15:0] in_tb;
@@ -30,3 +31,4 @@ module signext_tb();
 	signext signext_t(in_tb, out_tb);
 
 endmodule
+*/

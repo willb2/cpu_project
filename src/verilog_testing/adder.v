@@ -3,6 +3,7 @@
 */
 
 module adder(a, b, sum);
+ 
   input  [31:0] a;     // a input
 	input [31:0] b;     // b input
 	output [31:0] sum;   // sum output
@@ -14,9 +15,10 @@ module adder(a, b, sum);
   end
 
   assign sum = result;
+
 endmodule // add32
 
-
+/*
 module adder_tb;
 
   reg [31:0] a_tb;
@@ -26,7 +28,7 @@ module adder_tb;
   initial 
   begin
     $display("Adder Testbench");
-    a_tb = 32'h000F;
+    a_tb = 32'hFFFFFFFF;
     b_tb = 32'h0007;
     
     #100
@@ -38,3 +40,4 @@ module adder_tb;
   adder adder_tb(a_tb, b_tb, sum_tb);
 
 endmodule
+*/

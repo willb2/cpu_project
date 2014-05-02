@@ -1,11 +1,14 @@
 
 
-module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
+module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp, jumpNextAddr, jumpMux, instruction);
+	input clk;
 	input [5:0] opcode;
 	input [5:0] funct;
 	output reg regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg;
 	output reg [3:0] aluOp;
-
+	output reg jumpMux;
+	output reg [31:0] jumpNextAddr;
+	input [31:0] instruction;
 
 	// Opcodes
 		// ADD  	0x00  	0x20 (Funct)    Ex: 0b[000000][ $rs ][ $rt ][ $rd ][00000][100000]
@@ -40,120 +43,130 @@ module controls(opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrit
 		// R-Type		10 			100101 			OR 					0001
 		// R-Type 		10 			101010 			set on less than 	0111
 
-	always @ (opcode) 
+	always @ (posedge clk) 
 	begin
+		#20
 		case(opcode)
 			6'h00 : // ADD
 				begin
-					$display("ADD Instruction");
-					regDst = 1'b0;
-					regWrite = 1'b0;
-					aluSrc = 1'b0;
-					pcSrc = 1'b0;
-					memRead = 1'b0;
-					memWrite = 1'b0;
-					memToReg = 1'b0;
-					aluOp = 4'b00;
+					regDst = 1'b1; // RgDst comes from rt field 		RgDst comes from rd field
+					regWrite = 1'b1; // None 							writeData input written to Write register
+					aluSrc = 1'b0; // 2nd ALU src from RegData2 		2nd ALU src from SignExtend
+					pcSrc = 1'b1; // PC input from adder+4 			PC input from adder, branch target
+					memRead = 1'b0; // None 							Data Read from Memory
+					memWrite = 1'b0; // None							Data Written to Memory
+					memToReg = 1'b0; // RegWriteData comes from ALU 	RegWriteData comes from Memory
+					aluOp = 4'b0010; // 
+					jumpMux = 1'b0;
+					$display("CNTL: ADD: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 			6'h08 : // ADDI
 				begin
-					$display("ADDI Instruction");
-					regDst = 1'b0;
-					regWrite = 1'b0;
-					aluSrc = 1'b0;
-					pcSrc = 1'b0;
-					memRead = 1'b0;
-					memWrite = 1'b0;
-					memToReg = 1'b0;
-					aluOp = 4'b00;
+					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
+					regWrite = 1'b1; // None 							writeData input written to Write register
+					aluSrc = 1'b1; // 2nd ALU src from RegData2 		2nd ALU src from SignExtend
+					pcSrc = 1'b0; // PC input from adder+4 			PC input from adder, branch target
+					memRead = 1'b0; // None 							Data Read from Memory
+					memWrite = 1'b0; // None							Data Written to Memory
+					memToReg = 1'b0; // RegWriteData comes from ALU 	RegWriteData comes from Memory
+					aluOp = 4'b0010; // 
+					jumpMux = 1'b0;
+					$display("CNTL: ADDI: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
 			6'h23 : // LW
 				begin
-					$display("LW Instruction");
-					regDst = 1'b0;
-					regWrite = 1'b0;
-					aluSrc = 1'b0;
-					pcSrc = 1'b0;
-					memRead = 1'b0;
-					memWrite = 1'b0;
-					memToReg = 1'b0;
-					aluOp = 4'b00;
+					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
+					regWrite = 1'b1; // None 							writeData input written to Write register
+					aluSrc = 1'b1; // 2nd ALU src from RegData2 		2nd ALU src from SignExtend
+					pcSrc = 1'b0; // PC input from adder+4 			PC input from adder, branch target
+					memRead = 1'b1; // None 							Data Read from Memory
+					memWrite = 1'b0; // None							Data Written to Memory
+					memToReg = 1'b1; // RegWriteData comes from ALU 	RegWriteData comes from Memory
+					aluOp = 4'b0010; // 
+					jumpMux = 1'b0;
+					$display("CNTL: LW: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
 			6'h2B : // SW
 				begin
-					$display("SW Instruction");
-					regDst = 1'b0;
-					regWrite = 1'b0;
-					aluSrc = 1'b0;
-					pcSrc = 1'b0;
-					memRead = 1'b0;
-					memWrite = 1'b0;
-					memToReg = 1'b0;
-					aluOp = 4'b00;
+					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
+					regWrite = 1'b0; // None 							writeData input written to Write register
+					aluSrc = 1'b1; // 2nd ALU src from RegData2 		2nd ALU src from SignExtend
+					pcSrc = 1'b0; // PC input from adder+4 			PC input from adder, branch target
+					memRead = 1'b0; // None 							Data Read from Memory
+					memWrite = 1'b1; // None							Data Written to Memory
+					memToReg = 1'b0; // RegWriteData comes from ALU 	RegWriteData comes from Memory
+					aluOp = 4'b0010; // 
+					jumpMux = 1'b0;
+					$display("CNTL: SW: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
 			6'h04 : // BEQ
 				begin
-					$display("BEQ Instruction");
-					regDst = 1'b0;
-					regWrite = 1'b0;
-					aluSrc = 1'b0;
-					pcSrc = 1'b0;
-					memRead = 1'b0;
-					memWrite = 1'b0;
-					memToReg = 1'b0;
-					aluOp = 4'b00;
+					regDst = 1'b1; // RgDst comes from rt field 		RgDst comes from rd field
+					regWrite = 1'b0; // None 							writeData input written to Write register
+					aluSrc = 1'b0; // 2nd ALU src from RegData2 		2nd ALU src from SignExtend
+					pcSrc = 1'b1; // PC input from adder+4 			PC input from adder, branch target
+					memRead = 1'b0; // None 							Data Read from Memory
+					memWrite = 1'b0; // None							Data Written to Memory
+					memToReg = 1'b0; // RegWriteData comes from ALU 	RegWriteData comes from Memory
+					aluOp = 4'b0110; // 
+					jumpMux = 1'b0;
+					$display("CNTL: BEQ: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
 			6'h05 : // BNE
 				begin
-					$display("BNE Instruction");
-					regDst = 1'b0;
-					regWrite = 1'b0;
-					aluSrc = 1'b0;
-					pcSrc = 1'b0;
-					memRead = 1'b0;
-					memWrite = 1'b0;
-					memToReg = 1'b0;
-					aluOp = 4'b00;
+					regDst = 1'b1; // RgDst comes from rt field 		RgDst comes from rd field
+					regWrite = 1'b0; // None 							writeData input written to Write register
+					aluSrc = 1'b0; // 2nd ALU src from RegData2 		2nd ALU src from SignExtend
+					pcSrc = 1'b1; // PC input from adder+4 			PC input from adder, branch target
+					memRead = 1'b0; // None 							Data Read from Memory
+					memWrite = 1'b0; // None							Data Written to Memory
+					memToReg = 1'b0; // RegWriteData comes from ALU 	RegWriteData comes from Memory
+					aluOp = 4'b0110; // 
+					jumpMux = 1'b0;
+					$display("CNTL: BNE: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
 			6'h02 : // JMP
 				begin
-					$display("JMP Instruction");
-					regDst = 1'b0;
-					regWrite = 1'b0;
-					aluSrc = 1'b0;
-					pcSrc = 1'b0;
-					memRead = 1'b0;
-					memWrite = 1'b0;
-					memToReg = 1'b0;
-					aluOp = 4'b00;
+					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
+					regWrite = 1'b0; // None 							writeData input written to Write register
+					aluSrc = 1'b0; // 2nd ALU src from RegData2 		2nd ALU src from SignExtend
+					pcSrc = 1'b0; // PC input from adder+4 			PC input from adder, branch target
+					memRead = 1'b0; // None 							Data Read from Memory
+					memWrite = 1'b0; // None							Data Written to Memory
+					memToReg = 1'b0; // RegWriteData comes from ALU 	RegWriteData comes from Memory
+					aluOp = 4'b0000; //
+					jumpMux = 1'b1;
+					jumpNextAddr = (instruction & 32'h0000FFFF);
+					$display("CNTL: JMP: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h, jumpMux: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp, jumpMux);
 				end
 
 			default : 
 				begin
-					$display("Unknown Instruction: %h", opcode);
-					regDst = 1'b0;
-					regWrite = 1'b0;
-					aluSrc = 1'b0;
-					pcSrc = 1'b0;
-					memRead = 1'b0;
-					memWrite = 1'b0;
-					memToReg = 1'b0;
-					aluOp = 4'b00;
+					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
+					regWrite = 1'b0; // None 							writeData input written to Write register
+					aluSrc = 1'b0; // 2nd ALU src from RegData2 		2nd ALU src from SignExtend
+					pcSrc = 1'b0; // PC input from adder+4 			PC input from adder, branch target
+					memRead = 1'b0; // None 							Data Read from Memory
+					memWrite = 1'b0; // None							Data Written to Memory
+					memToReg = 1'b0; // RegWriteData comes from ALU 	RegWriteData comes from Memory
+					aluOp = 4'b0010; // 
+					jumpMux = 1'b0;
+					$display("CNTL: Unknown Instruction: %h", opcode);
 				end
 		endcase
 	end
 
-
-
 endmodule
 
+/*
 module controls_tb();
 
+	reg clk_tb;
 	reg [5:0] opcode_tb;
 	reg [5:0] funct_tb;
 	wire regDst_tb, regWrite_tb, aluSrc_tb, pcSrc_tb, memRead_tb, memWrite_tb, memToReg_tb;
@@ -162,20 +175,23 @@ module controls_tb();
 	initial 
 	begin
 		$display("Controls Testbench");
+		clk_tb = 0;
 		opcode_tb = 6'h00;
 		funct_tb = 6'h00;
+		
+		#1
+		clk_tb = 1;
 
 		#100
-		$display("___ Instruction: regDst %h, regWrite %h, aluSrc %h", regDst_tb, regWrite_tb, aluSrc_tb);
-		$display("___ Instruction: pcSrc %h, memRead %h, memWrite %h", pcSrc_tb, memRead_tb, memWrite_tb);
-		$display("___ Instruction: memToReg %h, aluOp %h", memToReg_tb, aluOp_tb);
+		$display("Add Instruction: regDst %h, regWrite %h, aluSrc %h", regDst_tb, regWrite_tb, aluSrc_tb);
+		$display("Add Instruction: pcSrc %h, memRead %h, memWrite %h", pcSrc_tb, memRead_tb, memWrite_tb);
+		$display("Add Instruction: memToReg %h, aluOp %h", memToReg_tb, aluOp_tb);
 
 		
 		$finish;
 	end
 
-	controls controls_t(opcode_tb, funct_tb, regDst_tb, regWrite_tb, aluSrc_tb, pcSrc_tb, memRead_tb, memWrite_tb, memToReg_tb, aluOp_tb);
+	controls controls_t(clk_tb, opcode_tb, funct_tb, regDst_tb, regWrite_tb, aluSrc_tb, pcSrc_tb, memRead_tb, memWrite_tb, memToReg_tb, aluOp_tb);
 
 endmodule
-
-
+*/

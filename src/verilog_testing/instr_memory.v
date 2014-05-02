@@ -3,30 +3,28 @@
 */
 
 
-module instr_memory(address, instruction);
+module instr_memory(clk, address, instruction);
+	input clk;
 	input [31:0] address;
-	output reg [31:0] instruction;
+	output reg [31:0] instruction, jumpNextAddr;
+	output reg jumpMux;
 
-	reg [31:0] Mem [0:10]; // 201 32-bit words
+	reg [31:0] Mem [0:10]; // 11 32-bit words
 	reg [5:0] opcode;
+	reg signed [31:0] newInstr;
+	reg [31:0] oldInstr;
 
 	initial $readmemh("instructions.txt", Mem);
 	
-	always@(address) begin
+	always@(posedge clk) begin
+		#10
 		instruction = Mem[address];
-	end
-
-	always@(instruction) begin
-		opcode = instruction[31:26];
-		if(opcode == 6'h02) begin
-			$display("JMP Instruction: Jumping from address %h to %h", address, instruction[24:0]);
-			instruction = Mem[instruction[24:0]];
-		end
+		$display("IMEM: new instruction: %h", instruction);
 	end
 
 endmodule
 
-
+/*
 module instr_memory_tb();
 	reg [31:0] address_tb;
 	wire [31:0] instruction_tb;
@@ -58,4 +56,4 @@ module instr_memory_tb();
 
 endmodule
 
-
+*/

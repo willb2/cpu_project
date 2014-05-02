@@ -4,8 +4,8 @@
 
 // Mux: data2reg: 0    data2ext: 1
 
-module alu(aluOp, data1, data2reg, data2ext, mux, result, zero);
-	input mux;
+module alu(clk, aluOp, data1, data2reg, data2ext, mux, result, zero);
+	input clk, mux;
 	input signed [3:0] aluOp;
 	input signed [31:0] data1, data2reg, data2ext;
 	output wire [31:0] result;
@@ -14,7 +14,8 @@ module alu(aluOp, data1, data2reg, data2ext, mux, result, zero);
 	reg [31:0] out;
 	output reg zero;
 
-	always @ (mux) begin
+	always @ (posedge clk) begin
+		#40
 		if (mux == 1) begin
 			data2 = data2ext;
 		end else begin
@@ -22,15 +23,34 @@ module alu(aluOp, data1, data2reg, data2ext, mux, result, zero);
 		end
 	end
 
-	always @ (*) begin
+	always @ (posedge clk) begin
+		#41
 		case(aluOp)
-			4'b0000 : out = data1 & data2; // AND
-			4'b0001 : out = data1 | data2; // OR
-			4'b0010 : out = data1 + data2; // add
-			4'b0110 : out = data1 - data2; // subtract
-			4'b0111 : out = 32'h0; // set on less than
-			4'b1100 : out = 32'h0; // NOR
-			default : out = 32'h0;
+			4'b0000 : // AND
+				begin
+					out = data1 & data2;
+					$display("ALU: AND op: %h", out);
+				end
+			4'b0001 : // OR
+				begin
+					out = data1 | data2;
+					$display("ALU: OR op: %h", out);
+				end
+			4'b0010 : // add
+				begin
+					out = data1 + data2; 
+					$display("ALU: ADD op: %h + %h = %h", data1, data2, out);
+				end
+			4'b0110 : // subtract
+				begin
+					out = data1 - data2; 
+					$display("ALU: SUB op: %h - %h = %h", data1, data2, out);
+				end
+			default :
+				begin
+					out = 32'h1;
+					$display("ALU: UNKOWN Op");
+				end
 		endcase
 	end
 
@@ -46,10 +66,10 @@ module alu(aluOp, data1, data2reg, data2ext, mux, result, zero);
 
 endmodule
 
-
+/*
 module alu_tb();
 
-	reg mux_tb;
+	reg clk_tb, mux_tb;
 	reg [3:0] aluOp_tb;
 	reg [31:0] data1_tb;
 	reg [31:0] data2reg_tb;
@@ -85,9 +105,9 @@ module alu_tb();
 		$finish;
 	end
 
-	alu alu_t(aluOp_tb, data1_tb, data2reg_tb, data2ext_tb, mux_tb, result_tb, zero_tb);
+	alu alu_t(clk_tb, aluOp_tb, data1_tb, data2reg_tb, data2ext_tb, mux_tb, result_tb, zero_tb);
 
 
 endmodule
 
-
+*/

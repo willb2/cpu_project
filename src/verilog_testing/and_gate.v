@@ -14,7 +14,7 @@ module and_gate(zero, pcSrc, branchMux);
 
 endmodule
 
-
+/*
 module and_gate_tb();
 	reg zero_tb;
 	reg pcSrc_tb;
@@ -34,3 +34,4 @@ module and_gate_tb();
 
 	and_gate and_gate(zero_tb, pcSrc_tb, branchMux_tb);
 endmodule
+*/

@@ -17,17 +17,19 @@ end:
 main:
 	lw $r1, 0($zero) # load first data        		0x8C010000
 	lw $r2, 1($zero) # load second data				0x8C020001
-	add $r3, $r1, $zero # 							0x00610020
+	add $r3, $r1, $zero # 							0x00011820
 	# setup for loop (use second data as count)
 
 loop:
 	addi $r2, $r2, -1 # subtract 1 from count 		0x2042FFFF
-	bne $r2, $zero, loop # compare count and zero 	0x10400001 // this should be a relative jump, not absolute
-	add $r3, $r1, $zero # add data 					0x00610020
-	j end # jump end 								0x08000006
+	be $r2, $zero, end # compare count and zero 	0x1040FFF9
+	add $r3, $r1, $zero # add data 					0x00610C20
+	j loop # jump loop 								0x08000006
 
 halt:
 	j halt #										0x0800000A
 
 
 
+00111
+11001
