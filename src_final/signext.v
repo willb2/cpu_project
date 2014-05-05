@@ -1,3 +1,6 @@
+/*
+Sign extends an incoming two’s compliment number by filling additional 16 most significant bits with the most-significant bit of the incoming number.
+*/
 module signext(in, out);
 	input signed [15:0] in;
 	output signed [31:0] out;
@@ -7,7 +10,10 @@ module signext(in, out);
 endmodule
 
 
-/*
+
+/* ***************************************************************
+// ***************** signextender testbench for testing/debugging
+// ***************************************************************
 module signext_tb();
 
 	reg [15:0] in_tb;

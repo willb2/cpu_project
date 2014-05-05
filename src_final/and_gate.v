@@ -1,4 +1,6 @@
-
+/*
+    simple one-bit and gate implementation.
+*/
 
 module and_gate(zero, pcSrc, branchMux);
 	input zero, pcSrc;
@@ -14,7 +16,9 @@ module and_gate(zero, pcSrc, branchMux);
 
 endmodule
 
-/*
+/* ************************************************************
+// ***************** and_gate testbench for testing/debugging
+// ************************************************************
 module and_gate_tb();
 	reg zero_tb;
 	reg pcSrc_tb;

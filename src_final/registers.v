@@ -54,23 +54,25 @@ module registers(clk, readReg1, readReg2, writeReg, readData1, readData2, writeD
 
 endmodule
 
-/*
+/* ************************************************************
+// ***************** registers testbench for testing/debugging
+// ************************************************************
 module registers_tb();
 	reg clk_tb, memToReg_tb, regWrite_tb, regDst_tb;
-	reg [4:0] readReg1_tb, readReg2_tb, writeReg_tb;
-	reg [31:0] writeDataMem_tb, writeDataALU_tb;
-	wire [31:0] readData1_tb, readData2_tb;
+	reg [4:0] readReg1_tb, readReg2_tb, writeReg_tb; //5 bit read/write registers
+	reg [31:0] writeDataMem_tb, writeDataALU_tb; //32bit mem write
+	wire [31:0] readData1_tb, readData2_tb; //32bit mem read
 
 	initial 
 	begin
 		$display("Registers Testbench");
-		// Set parameters
-		clk_tb =1'b0;
-		memToReg_tb = 1'b0;
-		readReg1_tb = 5'h00;
-		readReg2_tb = 5'h02;
-		writeReg_tb = 5'h02;
-		writeDataMem_tb = 32'hF0F0;
+		// declare and initialize parameters
+		clk_tb =1'b0; //1 bit binary
+		memToReg_tb = 1'b0; //1 bit binary
+		readReg1_tb = 5'h00; //5 bit hex
+		readReg2_tb = 5'h02; //5 bit hex
+		writeReg_tb = 5'h02; //5 bit hex
+		writeDataMem_tb = 32'hF0F0; //32bit hex
 		regDst_tb = 1;
 		regWrite_tb = 1;
 

@@ -1,4 +1,5 @@
 /*
+ Read Only Memory used to store and retrieve program instructions. (2^28 bytes large / 2^26 words large)
 	What is the address size?
 */
 
@@ -10,9 +11,9 @@ module instr_memory(clk, address, instruction);
 	output reg jumpMux;
 
 	reg [31:0] Mem [0:10]; // 11 32-bit words
-	reg [5:0] opcode;
-	reg signed [31:0] newInstr;
-	reg [31:0] oldInstr;
+	reg [5:0] opcode; // 5 bit opcode
+	reg signed [31:0] newInstr; //singed 32bit instruction
+	reg [31:0] oldInstr; //32 bit instruction
 
 	initial $readmemh("instructions.txt", Mem);
 	
@@ -24,7 +25,9 @@ module instr_memory(clk, address, instruction);
 
 endmodule
 
-/*
+/* ********************************************************************
+// ***************** instruction_memory testbench for testing/debugging
+// ********************************************************************
 module instr_memory_tb();
 	reg [31:0] address_tb;
 	wire [31:0] instruction_tb;

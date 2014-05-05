@@ -1,24 +1,26 @@
 /*
-  Should inputs be signed?
+  This module is an adder of two inputs that are 32 bits (a,b) that are in Hex format and adds them together.
 */
 
 module adder(a, b, sum);
  
-  input  [31:0] a;     // a input
-	input [31:0] b;     // b input
-	output [31:0] sum;   // sum output
-  reg [31:0] result;
+  input  [31:0] a;     // 32bit a input
+	input [31:0] b;     // 32bit b input
+	output [31:0] sum;   // 32bit sum output
+  reg [31:0] result;  //32bit register for storing
 	
   always @ (*) 
   begin
-    result = a + b;
+    result = a + b; // calculates the addition of a and b
   end
 
-  assign sum = result;
+  assign sum = result; //assigns the result to the returned sum value
 
 endmodule // add32
 
-/*
+/* **********************************************
+// ***************** adder testbench for testing
+// **********************************************
 module adder_tb;
 
   reg [31:0] a_tb;

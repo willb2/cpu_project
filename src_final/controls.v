@@ -1,4 +1,6 @@
+/*
 
+*/
 
 module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp, jumpNextAddr, jumpMux, instruction);
 	input clk;
@@ -10,7 +12,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 	output reg [31:0] jumpNextAddr;
 	input [31:0] instruction;
 
-	// Opcodes
+	// ************************** Opcodes  **************************
 		// ADD  	0x00  	0x20 (Funct)    Ex: 0b[000000][ $rs ][ $rt ][ $rd ][00000][100000]
 		// ADDI 	0x08  	 				Ex: 0b[001000][ $zero ] [ $dest ] [ signextimm ]
 		// LW 		0x23  					Ex: 0b[100011][ $zero ] [ $dest ] [  offset  ]
@@ -20,7 +22,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 		// JMP 		0x02  					Ex: 0b[000010][ instrAddr  ]
 
 
-	// Controls
+	// *************************** Controls **************************
 		// Signal Name			Effect When Deasserted 			Effect When Assert
 
 		// RegDst 				RgDst comes from rt field 		RgDst comes from rd field
@@ -31,7 +33,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 		// MemWrite 			None							Data Written to Memory
 		// MemToReg 			RegWriteData comes from ALU 	RegWriteData comes from Memory
 
-	// ALU OP
+	// **************************** ALU OP ****************************
 		// OpCode 		ALUOp 		Funct Field  	ALU Action 			ALU Control Input
 		
 		// LW 			00 			XXXXXX			add 				0010
@@ -43,11 +45,12 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 		// R-Type		10 			100101 			OR 					0001
 		// R-Type 		10 			101010 			set on less than 	0111
 
+// switch statement for the different opcodes the control will handle.
 	always @ (posedge clk) 
 	begin
 		#20
 		case(opcode)
-			6'h00 : // ADD
+			6'h00 : // ADD op code in hex
 				begin
 					regDst = 1'b1; // RgDst comes from rt field 		RgDst comes from rd field
 					regWrite = 1'b1; // None 							writeData input written to Write register
@@ -60,7 +63,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 					jumpMux = 1'b0;
 					$display("CNTL: ADD: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
-			6'h08 : // ADDI
+			6'h08 : // ADDI op code in hex
 				begin
 					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
 					regWrite = 1'b1; // None 							writeData input written to Write register
@@ -74,7 +77,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 					$display("CNTL: ADDI: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
-			6'h23 : // LW
+			6'h23 : // LW op code in hex
 				begin
 					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
 					regWrite = 1'b1; // None 							writeData input written to Write register
@@ -88,7 +91,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 					$display("CNTL: LW: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
-			6'h2B : // SW
+			6'h2B : // SW op code in hex
 				begin
 					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
 					regWrite = 1'b0; // None 							writeData input written to Write register
@@ -102,7 +105,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 					$display("CNTL: SW: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
-			6'h04 : // BEQ
+			6'h04 : // BEQ op code in hex
 				begin
 					regDst = 1'b1; // RgDst comes from rt field 		RgDst comes from rd field
 					regWrite = 1'b0; // None 							writeData input written to Write register
@@ -116,7 +119,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 					$display("CNTL: BEQ: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
-			6'h05 : // BNE
+			6'h05 : // BNE op code in hex
 				begin
 					regDst = 1'b1; // RgDst comes from rt field 		RgDst comes from rd field
 					regWrite = 1'b0; // None 							writeData input written to Write register
@@ -130,7 +133,7 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 					$display("CNTL: BNE: regDst: %h, regWrite: %h, aluSrc: %h, pcSrc: %h, memRead: %h, memWrite: %h, memToReg: %h, aluOp: %h", regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp);
 				end
 
-			6'h02 : // JMP
+			6'h02 : // JMP op code in hex
 				begin
 					regDst = 1'b0; // RgDst comes from rt field 		RgDst comes from rd field
 					regWrite = 1'b0; // None 							writeData input written to Write register
@@ -163,7 +166,9 @@ module controls(clk, opcode, funct, regDst, regWrite, aluSrc, pcSrc, memRead, me
 
 endmodule
 
-/*
+/* *******************************************************
+// ***************** controls testbench for testing/debugging
+// *******************************************************
 module controls_tb();
 
 	reg clk_tb;

@@ -1,19 +1,19 @@
 /*
-	What is the address size?
+Random Access Memory used to store and retrieve program data. What is the address size?
 */
 
 module data_memory(clk, memRead, memWrite, address, dataIn, dataOut);
 	input clk, memRead, memWrite;
-	input [31:0] address, dataIn;
-	output reg [31:0] dataOut;
+	input [31:0] address, dataIn; //32 bit input
+	output reg [31:0] dataOut; //32bit output
 
-	reg [31:0] Mem [0:3]; // 32-bit words
+	reg [31:0] Mem [0:3]; //4 32-bit words
 
-	initial $readmemh("data.txt", Mem);
+	initial $readmemh("data.txt", Mem); //reads data from data.txt and puts in Mem
 
 	always@(posedge clk) begin
 		#50
-		if(memRead) begin
+		if(memRead) begin //tests that data.txt was not empty
 			dataOut = Mem[address];
 			$display("DMEM: output set to %h from address %h", Mem[address], address);
 		end
@@ -28,7 +28,9 @@ module data_memory(clk, memRead, memWrite, address, dataIn, dataOut);
 
 endmodule
 
-/*
+/* *******************************************************
+// ***************** data_memory testbench for testing/debugging
+// *******************************************************
 module data_memory_tb();
 	reg clk_tb;
 	reg memRead_tb;

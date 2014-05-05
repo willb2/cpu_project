@@ -1,4 +1,7 @@
 /*
+This program instantiates all the modules together to simulate the MIPS 32 bit CPU.
+*/
+/*
 Register Mux: 
 	Mem: 0    
 	ALU: 1
@@ -9,6 +12,7 @@ ALU Mux:
 	data2reg: 0    
 	data2ext: 1
 */
+/* *include section of other modules)**** */
 `include "program_counter.v"
 `include "instr_memory.v"
 `include "controls.v"
@@ -18,7 +22,7 @@ ALU Mux:
 `include "alu.v"
 `include "data_memory.v"
 `include "and_gate.v"
-
+/* ************************************* */
 
 module top(clk, rst);
 	input clk, rst;
@@ -52,32 +56,42 @@ module top(clk, rst);
 	wire branchMux;
 
 
-	// Modules
+	// Module instantiation
+	//program_counter
 	program_counter pc(clk, rst, norm_iaddr, branch_iaddr, branchMux, pc_out, jumpNextAddr, jumpMux);
 	
 	instr_memory im(clk, pc_out, instruction);
 	
-	// Opcode [31:26]    Funct [5:0]   
+	// Opcode [31:26]    Funct [5:0]
+	//controls   
 	controls controls(clk, instruction[31:26], instruction[5:0], regDst, regWrite, aluSrc, pcSrc, memRead, memWrite, memToReg, aluOp, jumpNextAddr, jumpMux, instruction);
 
+	// adder
 	adder adder_norm(pc_out, 31'h01, norm_iaddr);
 	
 	adder adder_branch(norm_iaddr, signext_out, branch_iaddr);
 	
 	// [Rs 25:21] [Rt 20:16] [Rd 15:11]
+	//registers
 	registers reggies(clk, instruction[25:21], instruction[20:16], instruction[15:11], regData1, regData2, alu_out, dmem_out, memToReg, regWrite, regDst);
 	
+	//sign extender
 	signext signext(instruction[15:0], signext_out);
 
+	//alu
 	alu alu(clk, aluOp, regData1, regData2, signext_out, aluSrc, alu_out, zero);
 	
+	//data memory
 	data_memory dm(clk, memRead, memWrite, alu_out, regData2, dmem_out);
 
+	//and op
 	and_gate and_gate(zero, pcSrc, branchMux);
 
 endmodule
 
-
+// *******************************************************
+// ***************** alu testbench for testing/debugging
+// *******************************************************
 module top_tb();
 	reg clk_tb;
 	reg rst_tb;
@@ -143,6 +157,8 @@ module top_tb();
 		$finish;
 	end
 	*/
+
+	//clock cycle loop
 	always begin
 		while (count < 6'h15) begin
 			count = count + 1;

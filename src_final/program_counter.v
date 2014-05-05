@@ -1,13 +1,13 @@
 /*
-
+The Program Counter is a set of registers that contain the address of the instruction to be fetched from instruction memory.
 */
 
 // Mux:  Norm: 0    Branch: 1
 
 module program_counter(clk, rst, addressNorm, addressBranch, mux, addressOut, jumpNextAddr, jumpMux);
 	input clk, rst, mux, jumpMux;
-	input [31:0] addressNorm, addressBranch, jumpNextAddr;
-	output reg [31:0] addressOut;
+	input [31:0] addressNorm, addressBranch, jumpNextAddr; //32 bit data input
+	output reg [31:0] addressOut; //32 bit register output
 
 	reg [31:0] nextAddr;
 
@@ -34,7 +34,9 @@ module program_counter(clk, rst, addressNorm, addressBranch, mux, addressOut, ju
 		
 endmodule
 
-/*
+/* ******************************************************************
+// ***************** program_counter testbench for testing/debugging
+// ******************************************************************
 module program_counter_tb();
 
 	reg clk_tb;

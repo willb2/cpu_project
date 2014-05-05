@@ -1,17 +1,17 @@
 /*
-	
+	   ALU is to perform different arithmetic or mathematical operations such as addition, subtraction, multiplication and division.
 */
 
 // Mux: data2reg: 0    data2ext: 1
 
 module alu(clk, aluOp, data1, data2reg, data2ext, mux, result, zero);
 	input clk, mux;
-	input signed [3:0] aluOp;
-	input signed [31:0] data1, data2reg, data2ext;
-	output wire [31:0] result;
+	input signed [3:0] aluOp;  //op code 4 bits
+	input signed [31:0] data1, data2reg, data2ext; //data in register 32 bit
+	output wire [31:0] result; // 32 bit results
 	
-	reg [31:0] data2;
-	reg [31:0] out;
+	reg [31:0] data2; //32 bit data
+	reg [31:0] out; //32 bit output
 	output reg zero;
 
 	always @ (posedge clk) begin
@@ -26,22 +26,22 @@ module alu(clk, aluOp, data1, data2reg, data2ext, mux, result, zero);
 	always @ (posedge clk) begin
 		#41
 		case(aluOp)
-			4'b0000 : // AND
+			4'b0000 : // AND op code
 				begin
 					out = data1 & data2;
 					$display("ALU: AND op: %h", out);
 				end
-			4'b0001 : // OR
+			4'b0001 : // OR op code
 				begin
 					out = data1 | data2;
 					$display("ALU: OR op: %h", out);
 				end
-			4'b0010 : // add
+			4'b0010 : // add op code
 				begin
 					out = data1 + data2; 
 					$display("ALU: ADD op: %h + %h = %h", data1, data2, out);
 				end
-			4'b0110 : // subtract
+			4'b0110 : // subtract op code
 				begin
 					out = data1 - data2; 
 					$display("ALU: SUB op: %h - %h = %h", data1, data2, out);
@@ -62,11 +62,13 @@ module alu(clk, aluOp, data1, data2reg, data2ext, mux, result, zero);
 		end
 	end
 
-	assign result = out;
+	assign result = out; //setting out to result for output
 
 endmodule
 
-/*
+/* *******************************************************
+// ***************** alu testbench for testing/debugging
+// *******************************************************
 module alu_tb();
 
 	reg clk_tb, mux_tb;
